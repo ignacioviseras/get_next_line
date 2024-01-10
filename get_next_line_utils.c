@@ -38,6 +38,25 @@ char	*ft_strchr(const char *s, int c)
 	return (NULL);
 }
 
+size_t	ft_strlcpy(char *dst, char *src, size_t size)
+{
+	size_t	index;
+	size_t	src_lenght;
+
+	index = 0;
+	src_lenght = ft_strlen(src);
+	if (size == 0)
+		return (src_lenght);
+	while (src[index] != '\0' && index < size - 1)
+	{
+		dst[index] = src[index];
+		index++;
+	}
+	dst[index] = '\0';
+	return (src_lenght);
+}
+
+
 char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
 	unsigned int	index;

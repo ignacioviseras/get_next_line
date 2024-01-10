@@ -32,23 +32,32 @@ static void	**free_all(char **str)
 // 	return (ft_strlen(text));
 // }
 
-static char	*read_file(int fd, char buf, char *text)
+static char	*read_file(int fd, char *text)
 {
-	char *leter;
-	int status;
+	char *letter;//lo q queda por leer
+	char *buf;//no esta debaj para no tener leaks
+	int status;//pa saber si se puede leer
 
-	status = read(fd, buf, BUFFER_SIZE);
-	while (status > 0)
+	status = 1;
+	buf = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
+	if (!buf)
+		free(buf);
+	while (!text || 
+		(status > 0 && ft_strchr(text, '\n') == NULL))
 	{
-		leter = ft_strchr(buf, '\n');
-		text = leter;
 		status = read(fd, buf, BUFFER_SIZE);
+		// if (status < 0)
+		// 	return (free)
+		buf = letter;
+		text = ft_strjoin(text, buf);
+		// printf("pr1: %s", letter);
 	}
-	if (status == 0)
-		leter = ft_strchr(buf, '\0');
-	return (leter);
-	// break;
+	// if (status == 0)
+	// 	letter = ft_strchr(buf, '\0');
+	printf("pr2: %s", letter);
+	return (text);
 
+	// break;
 	// buf = "hola que tal\n aqui estamos\0"
 	// buf = "a"
 	// if (buf[index] == \n || \0)
@@ -60,35 +69,56 @@ static char	*read_file(int fd, char buf, char *text)
 	ft_strchr(buf, '\0');
 	printf("GNL");
 	close(fd);
-	return (leter);
+	return (letter);
 }
 
 char	*get_next_line(int fd)
 {
 	char *line;
-	char *buf;
 	static char *text;
 
-	buf = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
-	// buf = '\0';
-	if (!buf)
-		return (0);
-	line = read_file(fd, buf, text);
+	if(fd < 0 || BUFFER_SIZE <= 0)
+		return(NULL);
+	line = read_file(fd, text);
 	// text += ft_strlen(line);
 	return (NULL);
 }
 
+char	*ft_strjoin(char const *s1, const char *s2)
+{
+	char	*str;
+	size_t	i;
+	size_t	j;
 
+	i = 0;
+	j = 0;
+	str = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
+	if (str == NULL)
+		return (NULL);
+	while (s1[i] != '\0')
+	{
+		str[i] = s1[i];
+		i++;
+	}
+	while (s2[j] != '\0')
+	{
+		str[i] = s2[j];
+		j++;
+		i++;
+	}
+	str[i] = '\0';
+	return (free(s1), str);
+}
 
-	// char buf[BUFFER_SIZE+1];
-	// buf[BUFFER_SIZE] = '\0';
-	// buf = "hola que tal\naqui estamos"
-	// while (ft_strlen(buf) > 0)
-	// {
-	// 	size_text = value_line(buf);
-	// 	buf += ft_strlen(buf) + size_text;
-	// }
-	// printf("%s", filter_text);
+// char buf[BUFFER_SIZE+1];
+// buf[BUFFER_SIZE] = '\0';
+// buf = "hola que tal\naqui estamos"
+// while (ft_strlen(buf) > 0)
+// {
+// 	size_text = value_line(buf);
+// 	buf += ft_strlen(buf) + size_text;
+// }
+// printf("%s", filter_text);
 
 int	main ()
 {

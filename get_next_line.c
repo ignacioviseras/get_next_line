@@ -27,62 +27,11 @@ static void	**free_all(char **str)
 // {
 // 	printf("VALUE LINE");
 // 	char *text;
-// 	text = ft_strchr(buf, '\n');
+// 	text = ft_strrchr(buf, '\n');
 // 	ft_strdup(text);
 // 	return (ft_strlen(text));
 // }
 
-static char	*read_file(int fd, char *text)
-{
-	char *letter;//lo q queda por leer
-	char *buf;//no esta debaj para no tener leaks
-	int status;//pa saber si se puede leer
-
-	status = 1;
-	buf = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
-	if (!buf)
-		free(buf);
-	while (!text || 
-		(status > 0 && ft_strchr(text, '\n') == NULL))
-	{
-		status = read(fd, buf, BUFFER_SIZE);
-		// if (status < 0)
-		// 	return (free)
-		buf = letter;
-		text = ft_strjoin(text, buf);
-		// printf("pr1: %s", letter);
-	}
-	// if (status == 0)
-	// 	letter = ft_strchr(buf, '\0');
-	printf("pr2: %s", letter);
-	return (text);
-
-	// break;
-	// buf = "hola que tal\n aqui estamos\0"
-	// buf = "a"
-	// if (buf[index] == \n || \0)
-	// {
-	// }
-	// while (\n || \0)
-	// 	index++;
-
-	ft_strchr(buf, '\0');
-	printf("GNL");
-	close(fd);
-	return (letter);
-}
-
-char	*get_next_line(int fd)
-{
-	char *line;
-	static char *text;
-
-	if(fd < 0 || BUFFER_SIZE <= 0)
-		return(NULL);
-	line = read_file(fd, text);
-	// text += ft_strlen(line);
-	return (NULL);
-}
 
 char	*ft_strjoin(char const *s1, const char *s2)
 {
@@ -107,7 +56,74 @@ char	*ft_strjoin(char const *s1, const char *s2)
 		i++;
 	}
 	str[i] = '\0';
-	return (free(s1), str);
+	return (str);
+	// return (free(s1), str); no va el free de s1
+}
+
+static char	*read_file(int fd, char *text)
+{
+	char *letter;//lo q queda por leer
+	char *buf;//no esta debaj para no tener leaks
+	int status;//pa saber si se puede leer
+	char *qwe;
+
+	// status = 1;
+	// buf = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
+	// if (!buf)
+	// 	free(buf);
+	status = read(fd, letter, BUFFER_SIZE);
+	printf("\nl4 %d", status);
+	// if (status < 0) //no funciona pq status es el ncaractrs leido
+	// 	return (NULL);
+
+	// buf[BUFFER_SIZE] = '\0';
+	qwe = ft_strchr(letter, 'a');
+	ft_strjoin(text, qwe);
+	printf("\nl2 %s", qwe);
+	
+	// while (!text || 
+	// 	(status > 0 && ft_strrchr(text, '\n') == NULL))
+	// {
+	// 	status = read(fd, buf, BUFFER_SIZE);
+	// 	// if (status < 0)
+	// 	// 	return (free)
+	// 	buf = letter;
+	// 	text = ft_strjoin(text, buf);
+	// 	// printf("pr1: %s", letter);
+	// }
+	// if (status == 0)
+	// 	letter = ft_strrchr(buf, '\0');
+	// printf("pr2: %s", letter);
+	// return (text);
+
+	// break;
+	// buf = "hola que tal\n aqui estamos\0"
+	// buf = "a"
+	// if (buf[index] == \n || \0)
+	// {
+	// }
+	// while (\n || \0)
+	// 	index++;
+
+	// ft_strrchr(buf, '\0');
+	printf("\nGNL");
+	close(fd);
+	return (qwe);
+}
+
+char	*get_next_line(int fd)
+{
+	char *line;
+	static char *text;
+
+	text = "";
+	if(fd < 0 || BUFFER_SIZE <= 0)
+		return(NULL);
+	printf("l1 %s", text);
+	text = read_file(fd, text);
+	printf("QWE %s", text);
+	// text += ft_strlen(line);
+	return (NULL);
 }
 
 // char buf[BUFFER_SIZE+1];

@@ -23,16 +23,6 @@ static void	**free_all(char **str)
 	return (free(str), NULL);
 }
 
-// static int *value_line(char *buf)
-// {
-// 	printf("VALUE LINE");
-// 	char *text;
-// 	text = ft_strrchr(buf, '\n');
-// 	ft_strdup(text);
-// 	return (ft_strlen(text));
-// }
-
-
 char	*ft_strjoin(char const *s1, const char *s2)
 {
 	char	*str;
@@ -62,53 +52,21 @@ char	*ft_strjoin(char const *s1, const char *s2)
 
 static char	*read_file(int fd, char *text)
 {
-	char *letter;//lo q queda por leer
-	char *buf;//no esta debaj para no tener leaks
-	int status;//pa saber si se puede leer
-	char *qwe;
+	char *all_text;//lo q queda por leer
+	int status;//pa sabéh si ce pue lee
+	char *sentence;
+	int len_word;
 
-	// status = 1;
-	// buf = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
-	// if (!buf)
-	// 	free(buf);
-	status = read(fd, letter, BUFFER_SIZE);
-	printf("\nl4 %d", status);
-	// if (status < 0) //no funciona pq status es el ncaractrs leido
-	// 	return (NULL);
-
-	// buf[BUFFER_SIZE] = '\0';
-	qwe = ft_strchr(letter, 'a');
-	ft_strjoin(text, qwe);
-	printf("\nl2 %s", qwe);
-	
-	// while (!text || 
-	// 	(status > 0 && ft_strrchr(text, '\n') == NULL))
-	// {
-	// 	status = read(fd, buf, BUFFER_SIZE);
-	// 	// if (status < 0)
-	// 	// 	return (free)
-	// 	buf = letter;
-	// 	text = ft_strjoin(text, buf);
-	// 	// printf("pr1: %s", letter);
-	// }
-	// if (status == 0)
-	// 	letter = ft_strrchr(buf, '\0');
-	// printf("pr2: %s", letter);
-	// return (text);
-
-	// break;
-	// buf = "hola que tal\n aqui estamos\0"
-	// buf = "a"
-	// if (buf[index] == \n || \0)
-	// {
-	// }
-	// while (\n || \0)
-	// 	index++;
-
-	// ft_strrchr(buf, '\0');
-	printf("\nGNL");
+	len_word = 0;
+	status = read(fd, all_text, BUFFER_SIZE);
+	if (!ft_strchr(all_text, '\n'))
+		len_word = ft_strlen(all_text);
+	else
+		len_word = ft_strchr(all_text, '\n') - all_text;
+	sentence = ft_substr(all_text, 0, len_word);
+	printf("\ncadena %s", sentence);
 	close(fd);
-	return (qwe);
+	return (sentence);
 }
 
 char	*get_next_line(int fd)
@@ -121,25 +79,14 @@ char	*get_next_line(int fd)
 		return(NULL);
 	printf("l1 %s", text);
 	text = read_file(fd, text);
-	printf("QWE %s", text);
-	// text += ft_strlen(line);
+	printf("\nsentence %s", text);
 	return (NULL);
 }
 
-// char buf[BUFFER_SIZE+1];
-// buf[BUFFER_SIZE] = '\0';
-// buf = "hola que tal\naqui estamos"
-// while (ft_strlen(buf) > 0)
-// {
-// 	size_text = value_line(buf);
-// 	buf += ft_strlen(buf) + size_text;
-// }
-// printf("%s", filter_text);
 
 int	main ()
 {
 	char *file = "./prueba.txt";
 	get_next_line(open(file, O_RDONLY));
-
 	return (0);
 }

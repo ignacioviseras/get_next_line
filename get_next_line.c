@@ -13,14 +13,9 @@
 #include "get_next_line.h"
 
 //clean all the mpomry
-static void	**free_all(char **str)
+static void free_all(char *str)
 {
-	int	i;
-
-	i = 0;
-	while (str[i])
-		free(str[i++]);
-	return (free(str), NULL);
+	free(str);
 }
 
 char	*ft_strjoin(char const *s1, const char *s2)
@@ -47,52 +42,54 @@ char	*ft_strjoin(char const *s1, const char *s2)
 	}
 	str[i] = '\0';
 	// return (str);
-	return (free(s1), str); //no va el free de s1
+	return (str); //no va el free de s1
 }
-
-// static char *union (char *line) {
-// 	static char *text;
-// 	text = ft_strjoin(text, line);
-// 	return (text)
-// }
 
 static char	*read_file(int fd)
 {
 	char *all_text;//lo q queda por leer
-	int status;//pa sabéh si ce pue lee
-	char *sentence;
-	int len_word;
+	int status;//pa sabéh si ce pue leer
+	char *sentence;//lo recibido
+	static char *txt;//guardado
+	int len_sentence;
 	
 	all_text = malloc(BUFFER_SIZE * sizeof(char));
-	len_word = 0;
+	txt = "";
+	len_sentence = 0;
 	status = read(fd, all_text, BUFFER_SIZE);
-	while (ft_strchr(all_text, '\n')) {
-		if (!ft_strchr(all_text, '\n'))
-			len_word = ft_strlen(all_text);
+	while (status > 0)
+	{
+		if (!ft_strchr(all_text, '\n')){
+			len_sentence += ft_strchr(all_text, '\n') - all_text;
+			sentence = ft_substr(all_text, 0, len_sentence);//lo que pintaria la cadena
+			txt = ft_strjoin(txt, sentence);
+			status = read(fd, all_text, BUFFER_SIZE);
+		
+		}
 		else
-			len_word = ft_strchr(all_text, '\n') - all_text;
-		sentence = ft_substr(all_text, 0, len_word);//lo que pintaria la cadena
-	} 
-	return (sentence);
+		{
+			len_sentence = ft_strlen(all_text);
+			sentence = ft_substr(all_text, 0, len_sentence);//lo que pintaria la cadena
+			txt = ft_strjoin(txt, sentence);
+			break;
+		}
+		printf("\ntxt %s", txt);
+	}
+	return (txt);
 }
 
 char	*get_next_line(int fd)
 {
 	char *line;
-	static char *text;
 
-	text = "";
 	if(fd < 0 || BUFFER_SIZE <= 0)
 		return(NULL);
 	// printf("l1 %s", text);
 	line = read_file(fd);
-	text = ft_strjoin(text, line);
 	
 	printf("\nline %s", line);
-	printf("\ntext %s", text);
 	return (NULL);
 }
-
 
 int	main ()
 {

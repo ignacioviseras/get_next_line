@@ -61,43 +61,48 @@ char	*ft_strjoin(char const *s1, const char *s2)
 // 	return (src_lenght);
 // }
 
+// char	*get_line()
+// {
+
+// }
+
 static char	*read_file(int fd)
 {
 	char *all_text;//lo q queda por leer
 	int status;//pa sabéh si ce pue leer
-	char *sentence;//lo recibido
 	static char *txt;//guardado
+	char *sentence;//lo recibido
+	char *aux;
 	int len_sentence;
-	
-	// char *p;
 
 	all_text = calloc(BUFFER_SIZE + 1, sizeof(char));
-	// *all_text = '\0';
 	if (!txt)
 		txt = "";
+	aux = "";
 	len_sentence = 0;
-	status = read(fd, all_text, BUFFER_SIZE);
+	status = 1; //read(fd, all_text, BUFFER_SIZE);
 	while (status > 0)
 	{
-		if (!ft_strchr(all_text, '\n')){
-			// printf("\n all %s", txt);
-			len_sentence = ft_strchr(all_text, '\n') - all_text;
-			sentence = ft_substr(all_text, 0, len_sentence);//lo que pintaria la cadena
-			txt = ft_strjoin(txt, sentence);
-			status = read(fd, all_text, BUFFER_SIZE);
-		
-		}
-		else // "\nco "  "tal\nco"
+		status = read(fd, all_text, BUFFER_SIZE);
+		all_text[status] = '\0';
+		if (ft_strchr(all_text, '\n'))// "asdasd\nc"
 		{
-			printf("\n all %s", all_text);
-			len_sentence = ft_strchr(all_text, '\n') - all_text;
-			sentence = ft_substr(all_text, 0, len_sentence);//lo que pintaria la cadena
-			txt = ft_strjoin(txt, all_text + len_sentence);
-			// return (all_text);
-			
-			break;
+			if (!aux)
+				txt = ft_strjoin(txt, aux);
+			else
+			{
+				aux = all_text;
+				// txt = ft_strjoin(txt, (ft_strchr(txt, '\n') - all_text));
+				while (*aux != '\n')
+					aux++;
+				len_sentence = aux - all_text;
+				sentence = ft_substr(all_text, 0, len_sentence);//lo que pintaria la cadena
+				txt = ft_strjoin(txt, sentence);
+			}
+			// break ;
 		}
-		// printf("\ntxt %s", txt);
+		else
+			txt = ft_strjoin(txt, all_text);
 	}
 	return (txt);
 }
@@ -108,10 +113,9 @@ char	*get_next_line(int fd)
 
 	if(fd < 0 || BUFFER_SIZE <= 0)
 		return(NULL);
-	// printf("l1 %s", text);
 	line = read_file(fd);
+	printf("\nCadena %s", line);
 	
-	printf("\nline %s", line);
 	return (NULL);
 }
 
@@ -125,6 +129,7 @@ int	main ()
 	a = open(file, O_RDONLY);
 	get_next_line(a);
 	get_next_line(a);
+	get_next_line(a);
 	close(a);
 	return (0);
 }
@@ -135,11 +140,12 @@ int	main ()
 
 /*
 
-hola\n
-que tal
+asdasdasd\nqweqweqweqwe
+aux = asdasdasd\nqweqweqweqwe
+
+static txt = asdasdasd
 
 
-
-
+\n\n\n\n\nasdasdasdasdasdasd\n\n\n\n\n
 
 */

@@ -57,6 +57,7 @@ static char	*read_file(int fd)
 	all_text = calloc(BUFFER_SIZE + 1, sizeof(char));
 	if (!txt)
 		txt = "";
+	aux = calloc(BUFFER_SIZE + 1, sizeof(char));
 	len_sentence = 0;
 	status = 1; //read(fd, all_text, BUFFER_SIZE);
 	while (status > 0)
@@ -68,7 +69,7 @@ static char	*read_file(int fd)
 			return (free(all_text), NULL);
 		if (ft_strchr(all_text, '\n'))// "asdasd\nc"
 		{
-			aux = all_text;
+			// ft_strlcpy(aux, all_text, ft_strlen(all_text));
 			len_sentence = ft_strlen(ft_strchr(all_text, '\n'));
 			sentence = ft_substr(all_text, 0, len_sentence);//lo que pintaria la cadena
 			txt = ft_strjoin(txt, sentence);
@@ -78,7 +79,12 @@ static char	*read_file(int fd)
 			txt = ft_strjoin(txt, all_text);
 		}
 	}
-	return (txt);
+	ft_strlcpy(aux, txt, ft_strlen(txt));
+	free(txt);
+	ft_strlcpy(txt, all_text, ft_strlen(all_text));
+	// aux = txt;
+	// txt = aux;
+	return (aux);
 }
 
 char	*get_next_line(int fd)

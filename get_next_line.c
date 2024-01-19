@@ -45,27 +45,6 @@ char	*ft_strjoin(char const *s1, const char *s2)
 	return (str); //no va el free de s1
 }
 
-// size_t	have_n(char *dst, char *src)
-// {
-// 	size_t	src_lenght;
-// 	size_t	index;
-
-// 	index = 0;
-// 	src_lenght = ft_strlen(src);
-// 	while (src[index] != '\0' && src[index] != '\n')
-// 	{
-// 		dst[index] = src[index];
-// 		index++;
-// 	}
-// 	dst[index] = '\0';
-// 	return (src_lenght);
-// }
-
-// char	*get_line()
-// {
-
-// }
-
 static char	*read_file(int fd)
 {
 	char *all_text;//lo q queda por leer
@@ -78,7 +57,6 @@ static char	*read_file(int fd)
 	all_text = calloc(BUFFER_SIZE + 1, sizeof(char));
 	if (!txt)
 		txt = "";
-	// aux = "";
 	len_sentence = 0;
 	status = 1; //read(fd, all_text, BUFFER_SIZE);
 	while (status > 0)
@@ -88,37 +66,17 @@ static char	*read_file(int fd)
 		//ctr del read
 		if (status < 0)
 			return (free(all_text), NULL);
-		// aux = txt;
-		// txt = ft_strjoin(txt, all_text);
-		// frr de aux?
-		// if (*aux != '\0')
-		// {
-		// 	while (*aux != '\n')
-		// 		++aux;
-		// 	txt = aux;
-		// }
-
 		if (ft_strchr(all_text, '\n'))// "asdasd\nc"
 		{
-			// aux = txt;
 			aux = all_text;
-			// txt = ft_sttrjoin(txt, all_text);
-			// txt = ft_strjoin(txt, (ft_strchr(txt, '\n') - all_text));
 			len_sentence = ft_strlen(ft_strchr(all_text, '\n'));
 			sentence = ft_substr(all_text, 0, len_sentence);//lo que pintaria la cadena
 			txt = ft_strjoin(txt, sentence);
-			// while (*aux != '\n')
-			// 	aux++;
-			// txt = aux;
-			// break ;
 		}
 		else
 		{
-			// aux = txt;
 			txt = ft_strjoin(txt, all_text);
 		}
-		// txt = ft_strjoin(txt, all_text);
-		//free de todo?
 	}
 	return (txt);
 }

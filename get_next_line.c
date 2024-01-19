@@ -78,31 +78,47 @@ static char	*read_file(int fd)
 	all_text = calloc(BUFFER_SIZE + 1, sizeof(char));
 	if (!txt)
 		txt = "";
-	aux = "";
+	// aux = "";
 	len_sentence = 0;
 	status = 1; //read(fd, all_text, BUFFER_SIZE);
 	while (status > 0)
 	{
 		status = read(fd, all_text, BUFFER_SIZE);
 		all_text[status] = '\0';
+		//ctr del read
+		if (status < 0)
+			return (free(all_text), NULL);
+		// aux = txt;
+		// txt = ft_strjoin(txt, all_text);
+		// frr de aux?
+		// if (*aux != '\0')
+		// {
+		// 	while (*aux != '\n')
+		// 		++aux;
+		// 	txt = aux;
+		// }
+
 		if (ft_strchr(all_text, '\n'))// "asdasd\nc"
 		{
-			if (!aux)
-				txt = ft_strjoin(txt, aux);
-			else
-			{
-				aux = all_text;
-				// txt = ft_strjoin(txt, (ft_strchr(txt, '\n') - all_text));
-				while (*aux != '\n')
-					aux++;
-				len_sentence = aux - all_text;
-				sentence = ft_substr(all_text, 0, len_sentence);//lo que pintaria la cadena
-				txt = ft_strjoin(txt, sentence);
-			}
+			// aux = txt;
+			aux = all_text;
+			// txt = ft_sttrjoin(txt, all_text);
+			// txt = ft_strjoin(txt, (ft_strchr(txt, '\n') - all_text));
+			len_sentence = ft_strlen(ft_strchr(all_text, '\n'));
+			sentence = ft_substr(all_text, 0, len_sentence);//lo que pintaria la cadena
+			txt = ft_strjoin(txt, sentence);
+			// while (*aux != '\n')
+			// 	aux++;
+			// txt = aux;
 			// break ;
 		}
 		else
+		{
+			// aux = txt;
 			txt = ft_strjoin(txt, all_text);
+		}
+		// txt = ft_strjoin(txt, all_text);
+		//free de todo?
 	}
 	return (txt);
 }

@@ -124,3 +124,22 @@ int	main ()
 	close(a);
 	return (0);
 }
+
+// int main(void)
+// {
+//     int     fd;
+//     char    *str;
+//     int     i;
+
+//     i = 0;
+//     fd = open("prueba.txt", O_RDONLY);
+//     while ((i <= 6))
+//     {
+//         str = get_next_line(fd);
+//         printf("line %i=>%s\n", i + 1, str);
+//         free(str);
+//         i++;
+//     }
+//     printf("BUFFER_SIZE = %d\n", BUFFER_SIZE);
+//     return (0);
+// }

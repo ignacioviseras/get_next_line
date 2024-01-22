@@ -12,12 +12,6 @@
 
 #include "get_next_line.h"
 
-//clean all the mpomry
-static void free_all(char *str)
-{
-	free(str);
-}
-
 char	*ft_strjoin(char const *s1, const char *s2)
 {
 	char	*str;
@@ -41,50 +35,69 @@ char	*ft_strjoin(char const *s1, const char *s2)
 		i++;
 	}
 	str[i] = '\0';
-	// return (str);
-	return (str); //no va el free de s1
+	// free(str);
+	return (str);
+}
+
+
+static char *have_n(char *buffer)
+{
+	char *sentence;//lo extraido
+	int len_sentence;
+	len_sentence = 0;
+
+	len_sentence = ft_strlen(ft_strchr(buffer, '\n'));
+	sentence = ft_strdup(buffer + len_sentence);
+	return (sentence);
+}
+
+static char *end_line(char *buffer)
+{
+	char *sentence;
+	int len_sentence;
+	len_sentence = 0;
+
+	len_sentence = ft_strlen(ft_strchr(buffer, '\n'));
+	sentence = ft_substr(buffer, 0, len_sentence);
+	return (sentence);
 }
 
 static char	*read_file(int fd)
 {
-	char *all_text;//lo q queda por leer
+	char *buffer;//lo q queda por leer
 	int status;//pa sabéh si ce pue leer
 	static char *txt;//guardado
-	char *sentence;//lo recibido
 	char *aux;
-	int len_sentence;
+	char *sentence;//lo extraido
+	char *start;
 
-	all_text = calloc(BUFFER_SIZE + 1, sizeof(char));
+	buffer = calloc(BUFFER_SIZE + 1, sizeof(char));
 	if (!txt)
 		txt = "";
-	aux = calloc(BUFFER_SIZE + 1, sizeof(char));
-	len_sentence = 0;
-	status = 1; //read(fd, all_text, BUFFER_SIZE);
+	status = read(fd, buffer, BUFFER_SIZE);
 	while (status > 0)
 	{
-		status = read(fd, all_text, BUFFER_SIZE);
-		all_text[status] = '\0';
-		//ctr del read
-		if (status < 0)
-			return (free(all_text), NULL);
-		if (ft_strchr(all_text, '\n'))// "asdasd\nc"
+		if (status < 0)//controls de read en whiles
+			return (free(buffer), NULL);
+		buffer[status] = '\0';
+		if (ft_strchr(buffer, '\n'))
 		{
-			// ft_strlcpy(aux, all_text, ft_strlen(all_text));
-			len_sentence = ft_strlen(ft_strchr(all_text, '\n'));
-			sentence = ft_substr(all_text, 0, len_sentence);//lo que pintaria la cadena
-			txt = ft_strjoin(txt, sentence);
+			sentence = have_n(buffer);
+			start = end_line(buffer);
+			aux = ft_strjoin(txt, start);
+			txt = ft_strdup(sentence);
+			return (aux);
 		}
 		else
 		{
-			txt = ft_strjoin(txt, all_text);
+			if (!txt)
+				txt = ft_strdup(buffer);
+			else
+				txt = ft_strjoin(txt, buffer);
 		}
+		status = read(fd, buffer, BUFFER_SIZE);
 	}
-	ft_strlcpy(aux, txt, ft_strlen(txt));
-	free(txt);
-	ft_strlcpy(txt, all_text, ft_strlen(all_text));
-	// aux = txt;
-	// txt = aux;
-	return (aux);
+	return (txt);
 }
 
 char	*get_next_line(int fd)
@@ -94,38 +107,20 @@ char	*get_next_line(int fd)
 	if(fd < 0 || BUFFER_SIZE <= 0)
 		return(NULL);
 	line = read_file(fd);
-	printf("\nCadena %s", line);
+	printf("%s", line);
 	
 	return (NULL);
 }
 
 int	main ()
 {
-
-	// printf("Cadena %s", have_n("qwe"));
 	char file[] = "./prueba.txt";
 	int a;
 
 	a = open(file, O_RDONLY);
 	get_next_line(a);
 	get_next_line(a);
-	get_next_line(a);
+	// get_next_line(a);
 	close(a);
 	return (0);
 }
-
-
-
-
-
-/*
-
-asdasdasd\nqweqweqweqwe
-aux = asdasdasd\nqweqweqweqwe
-
-static txt = asdasdasd
-
-
-\n\n\n\n\nasdasdasdasdasdasd\n\n\n\n\n
-
-*/

@@ -72,6 +72,7 @@ static char	*read_file(int fd)
 
 	if (!txt)
 		txt = "";
+	aux = "";
 	buffer = calloc(BUFFER_SIZE + 1, sizeof(char));
 	status = read(fd, buffer, BUFFER_SIZE);
 	while (status > 0)
@@ -102,19 +103,19 @@ char	*get_next_line(int fd)
 	return (line);
 }
 
-int	main ()
-{
-	char file[] = "./prueba.txt";
-	int a;
+// int	main ()
+// {
+// 	char file[] = "./prueba.txt";
+// 	int a;
 
-	a = open(file, O_RDONLY);
-	printf("%s", get_next_line(a));
-	// printf("%s", get_next_line(a));
-	// printf("%s", get_next_line(a));
-	// printf("%s", get_next_line(a));
-	close(a);
-	return (0);
-}
+// 	a = open(file, O_RDONLY);
+// 	printf("%s", get_next_line(a));
+// 	// printf("%s", get_next_line(a));
+// 	// printf("%s", get_next_line(a));
+// 	// printf("%s", get_next_line(a));
+// 	close(a);
+// 	return (0);
+// }
 
 // int main()
 // {

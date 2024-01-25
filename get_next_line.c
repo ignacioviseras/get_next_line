@@ -35,7 +35,7 @@ char	*ft_strjoin(char const *s1, const char *s2)
 		i++;
 	}
 	str[i] = '\0';
-	// free(str);
+	//free(&s1);
 	return (str);
 }
 
@@ -50,6 +50,7 @@ static char *extract(char *buffer)
 	len_sentence = 0;
 
 	len_all = ft_strlen(buffer);
+	// if 
 	len_sentence = ft_strlen(ft_strchr(buffer, '\n'));
 	sentence = ft_substr(buffer, 0, len_all - len_sentence + 1);
 	return (sentence);
@@ -61,6 +62,26 @@ static char *rest(char *buffer)
 
 	sentence = ft_strchr(buffer, '\n');
 	return (sentence+1);
+}
+
+static char *conditional(char *txt, char *aux)
+{
+	if (!(ft_strlen(aux) > 0))
+		return (txt);
+	return (aux);
+}
+
+static void	**free_all(char **str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		free(str[i]);
+		i++;
+	}
+	return (free(str), NULL);
 }
 
 static char	*read_file(int fd)
@@ -77,10 +98,8 @@ static char	*read_file(int fd)
 	status = read(fd, buffer, BUFFER_SIZE);
 	while (status > 0)
 	{
-		if (status < 0)//controls de read en whiles
-			return (free(buffer), NULL);
 		txt = ft_strjoin(txt, buffer);
-		if (ft_strchr(txt, '\n'))
+		if (ft_strchr(txt, '\n') || !(ft_strchr(txt, '\0')))
 		{
 			aux = extract(txt);
 			// free(txt)
@@ -88,8 +107,10 @@ static char	*read_file(int fd)
 			break;
 		}
 		status = read(fd, buffer, BUFFER_SIZE);
+		if (status < 0)//controls de read en whiles
+			return (*free_all(&buffer));
 	}
-	return (aux);
+	return (conditional(txt, aux));
 }
 
 char	*get_next_line(int fd)

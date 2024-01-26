@@ -39,7 +39,6 @@ char	*ft_strjoin(char const *s1, const char *s2)
 	return (str);
 }
 
-
 static char *extract(char *buffer)
 {
 	char *sentence;
@@ -50,28 +49,29 @@ static char *extract(char *buffer)
 	len_sentence = 0;
 
 	len_all = ft_strlen(buffer);
-	// if 
 	len_sentence = ft_strlen(ft_strchr(buffer, '\n'));
 	sentence = ft_substr(buffer, 0, len_all - len_sentence + 1);
 	return (sentence);
 }
 
-static char *rest(char *buffer)
+static char *line(char **txt)
 {
-	char *sentence;
+	char *aux;
+	char *finder;
 
-	sentence = ft_strchr(buffer, '\n');
-	return (sentence+1);
-}
-
-static char *conditional(char *txt, char *aux)
-{
-	if (!(ft_strlen(aux) > 0))
-		return (txt);
+	finder = ft_strchr(*txt, '\n');
+	if (finder)
+	{
+		aux = extract(*txt);
+		*txt = finder + 1;
+		return (aux);
+	}
+	else
+		return (*txt);
 	return (aux);
 }
 
-static void	**free_all(char **str)
+static char	**free_all(char **str)
 {
 	int	i;
 
@@ -87,30 +87,23 @@ static void	**free_all(char **str)
 static char	*read_file(int fd)
 {
 	char *buffer;
-	char *aux;
 	int status;
 	static char *txt;
 
 	if (!txt)
 		txt = "";
-	aux = "";
 	buffer = calloc(BUFFER_SIZE + 1, sizeof(char));
 	status = read(fd, buffer, BUFFER_SIZE);
 	while (status > 0)
 	{
 		txt = ft_strjoin(txt, buffer);
 		if (ft_strchr(txt, '\n') || !(ft_strchr(txt, '\0')))
-		{
-			aux = extract(txt);
-			// free(txt)
-			txt = rest(txt);
 			break;
-		}
 		status = read(fd, buffer, BUFFER_SIZE);
 		if (status < 0)//controls de read en whiles
 			return (*free_all(&buffer));
 	}
-	return (conditional(txt, aux));
+	return (line(&txt));
 }
 
 char	*get_next_line(int fd)
@@ -122,6 +115,13 @@ char	*get_next_line(int fd)
 	line = read_file(fd);
 	
 	return (line);
+}
+
+int	main ()
+{
+	printf("%s", get_next_line(-1));
+	return (0);
+
 }
 
 // int	main ()

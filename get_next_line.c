@@ -59,6 +59,11 @@ static char *line(char **txt)
 	char *aux;
 	char *finder;
 
+	// if (*txt == "")
+	// {
+	// 	free(*txt);
+	// 	return (NULL);
+	// }
 	finder = ft_strchr(*txt, '\n');
 	if (finder)
 	{
@@ -67,41 +72,52 @@ static char *line(char **txt)
 		return (aux);
 	}
 	else
-		return (*txt);
+	{
+		aux = *txt;
+		*txt = NULL;
+		return (aux);
+	}
 	return (aux);
 }
 
-static char	**free_all(char **str)
-{
-	int	i;
+// static char	**free_all(char **str)
+// {
+// 	int	i;
 
-	i = 0;
-	while (str[i])
-	{
-		free(str[i]);
-		i++;
-	}
-	return (free(str), NULL);
-}
+// 	i = 0;
+// 	while (str[i])
+// 	{
+// 		free(str[i]);
+// 		i++;
+// 	}
+// 	return (free(str), NULL);
+// }
 
 static char	*read_file(int fd)
 {
-	char *buffer;
+	char buffer[BUFFER_SIZE + 1];
 	int status;
 	static char *txt;
+	char *aux;
 
-	if (!txt)
-		txt = "";
-	buffer = calloc(BUFFER_SIZE + 1, sizeof(char));
 	status = read(fd, buffer, BUFFER_SIZE);
+	if (status < 0) //controls de read en whiles
+		return (NULL);
 	while (status > 0)
 	{
-		txt = ft_strjoin(txt, buffer);
+		if (!txt)
+			txt = ft_strdup(buffer);
+		else
+		{
+			aux = txt;
+			txt = ft_strjoin(txt, buffer);
+			free(aux);
+		}
 		if (ft_strchr(txt, '\n') || !(ft_strchr(txt, '\0')))
 			break;
 		status = read(fd, buffer, BUFFER_SIZE);
 		if (status < 0)//controls de read en whiles
-			return (*free_all(&buffer));
+			return (NULL);
 	}
 	return (line(&txt));
 }
@@ -117,20 +133,28 @@ char	*get_next_line(int fd)
 	return (line);
 }
 
-int	main ()
-{
-	printf("%s", get_next_line(-1));
-	return (0);
+// int	main ()
+// {
+// 	printf("%s", get_next_line(1));
+// 	return (0);
 
-}
+// }
 
 // int	main ()
 // {
 // 	char file[] = "./prueba.txt";
 // 	int a;
+// 	char *str;
 
 // 	a = open(file, O_RDONLY);
-// 	printf("%s", get_next_line(a));
+	
+// 	while((str = get_next_line(a)) != NULL)
+// 	{
+// 		printf("%s\n", str);
+// 		free(str);
+// 	}
+// 	free(str);
+// 	//printf("%s\n", get_next_line(a));
 // 	// printf("%s", get_next_line(a));
 // 	// printf("%s", get_next_line(a));
 // 	// printf("%s", get_next_line(a));
@@ -161,7 +185,7 @@ int	main ()
 //     {
 //         str = get_next_line(fd);
 //         printf("line %i=>%s\n", i + 1, str);
-//         free(str);
+//         //free(str);
 //         i++;
 //     }
 //     printf("BUFFER_SIZE = %d\n", BUFFER_SIZE);

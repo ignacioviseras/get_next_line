@@ -27,6 +27,7 @@ char	*ft_strchr(const char *s, int c)
 	size_t	index;
 
 	index = 0;
+	// printf("\n\nstrchr %s\n", s);
 	while (s && s[index] != '\0')
 	{
 		if (s[index] == (unsigned char)c)
@@ -91,6 +92,8 @@ char	*ft_strdup(const char *s)
 	char	*ptr;
 	size_t	len;
 
+	if (!s)
+		return (NULL);
 	len = ft_strlen((char *)s);
 	ptr = (char *)malloc(sizeof(char) * len + 1);
 	if (!ptr)

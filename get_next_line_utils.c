@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: igvisera <igvisera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/17 11:52:06 by igvisera          #+#    #+#             */
-/*   Updated: 2023/12/21 19:52:37 by igvisera         ###   ########.fr       */
+/*   Created: 2024/01/30 19:48:01 by igvisera          #+#    #+#             */
+/*   Updated: 2024/01/30 19:48:01 by igvisera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ char	*ft_strchr(const char *s, int c)
 	size_t	index;
 
 	index = 0;
-	// printf("\n\nstrchr %s\n", s);
 	while (s && s[index] != '\0')
 	{
 		if (s[index] == (unsigned char)c)
@@ -56,7 +55,6 @@ size_t	ft_strlcpy(char *dst, char *src, size_t size)
 	dst[index] = '\0';
 	return (src_lenght);
 }
-
 
 char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
@@ -101,5 +99,3 @@ char	*ft_strdup(const char *s)
 	ft_strlcpy(ptr, (char *)s, len + 1);
 	return (ptr);
 }
-
-// FALTA STRJOIN

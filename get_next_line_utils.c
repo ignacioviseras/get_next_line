@@ -17,7 +17,8 @@ size_t	ft_strlen(const char *s)
 	size_t	index;
 
 	index = 0;
-	while (s[index])
+
+	while (s[index] || !*s)
 		index++;
 	return (index);
 }
@@ -26,7 +27,7 @@ char	*ft_strchr(const char *s, int c)
 {
 	size_t	index;
 
-	index = 0;
+	index = 0; 
 	while (s && s[index] != '\0')
 	{
 		if (s[index] == (unsigned char)c)
@@ -63,8 +64,8 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	char			*schar;
 
 	index = 0;
-	if (start >= ft_strlen(s))
-		return (ft_strdup(""));
+	if (start >= ft_strlen(s) || !*s)
+		return (NULL);
 	if (ft_strlen(s + start) < len)
 		len = ft_strlen(s + start);
 	else if (len > ft_strlen(s) - start)
@@ -73,7 +74,7 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	if (!substr)
 		return (NULL);
 	schar = (char *)s;
-	while (s[index])
+	while (s[index] || !*s)
 	{
 		if (index == start)
 		{
@@ -90,7 +91,7 @@ char	*ft_strdup(const char *s)
 	char	*ptr;
 	size_t	len;
 
-	if (!s)
+	if (!s || !*s)
 		return (NULL);
 	len = ft_strlen((char *)s);
 	ptr = (char *)malloc(sizeof(char) * len + 1);

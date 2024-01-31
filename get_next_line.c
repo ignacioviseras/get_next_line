@@ -23,12 +23,12 @@ char	*ft_strjoin(char *s1, const char *s2)
 	str = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
 	if (str == NULL)
 		return (NULL);
-	while (s1[i] != '\0')
+	while (s1[i] != '\0' || !*s1)
 	{
 		str[i] = s1[i];
 		i++;
 	}
-	while (s2[j] != '\0')
+	while (s2[j] != '\0' || !*s2)
 	{
 		str[i] = s2[j];
 		j++;
@@ -44,6 +44,8 @@ static char	*extract(char *buffer)
 	int		len_sentence;
 	int		len_all;
 
+	if (!buffer || !*buffer)
+		return (NULL);
 	len_all = 0;
 	len_sentence = 0;
 	len_all = ft_strlen(buffer);
@@ -59,6 +61,8 @@ static char	*line(char **txt)
 	char	*t;
 
 	finder = ft_strchr(*txt, '\n');
+	if (!*txt)
+		return (NULL);
 	if (finder)
 	{
 		aux = extract(*txt);
@@ -90,7 +94,7 @@ static char	*read_file(int fd)
 	while (status > 0)
 	{
 		buffer[BUFFER_SIZE] = '\0';
-		if (!txt)
+		if (!txt || !*txt)
 			txt = ft_strdup(buffer);
 		else
 		{
@@ -104,6 +108,7 @@ static char	*read_file(int fd)
 		if (status < 0) // controls de read en whiles
 		{
 			txt = NULL;
+			free(buffer);
 			return (txt);
 		}
 	}
@@ -138,5 +143,13 @@ char	*get_next_line(int fd)
 // 	// printf("%s", get_next_line(a));
 // 	close(a);
 // 	system("leaks a.out");
+// 	return (0);
+// }
+
+
+// int main() {
+// 	char *asd = NULL;
+// 	printf("asd->'%s'", extract(asd));
+// 	// extract(asd);
 // 	return (0);
 // }

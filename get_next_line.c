@@ -60,9 +60,13 @@ static char	*line(char **txt)
 	char	*finder;
 	char	*t;
 
-	finder = ft_strchr(*txt, '\n');
 	if (!*txt)
+	{
+		// aux = *txt;
+		// free(aux);
 		return (NULL);
+	}
+	finder = ft_strchr(*txt, '\n');
 	if (finder)
 	{
 		aux = extract(*txt);
@@ -90,10 +94,14 @@ static char	*read_file(int fd)
 
 	status = read(fd, buffer, BUFFER_SIZE);
 	if (status < 0) // controls de read en whiles
+	{
+		free(txt);
+		txt = NULL;
 		return (NULL);
+	}
 	while (status > 0)
 	{
-		buffer[BUFFER_SIZE] = '\0';
+		buffer[status] = '\0';
 		if (!txt || !*txt)
 			txt = ft_strdup(buffer);
 		else
@@ -107,9 +115,9 @@ static char	*read_file(int fd)
 		status = read(fd, buffer, BUFFER_SIZE);
 		if (status < 0) // controls de read en whiles
 		{
+			free(txt);
 			txt = NULL;
-			free(buffer);
-			return (txt);
+			return (NULL);
 		}
 	}
 	return (line(&txt));
@@ -133,6 +141,18 @@ char	*get_next_line(int fd)
 
 // 	a = open(file, O_RDONLY);
 
+// 	if (BUFFER_SIZE > 100) {
+// 		char *temp;
+// 		do {
+// 			temp = get_next_line(a);
+
+// 			free(temp);
+// 		} while (temp != NULL);
+// 	}
+
+// 	close(a);
+// 	a = open(file, O_RDONLY);
+
 // 	while((str = get_next_line(a)) != NULL)
 // 	{
 // 		printf("%s", str);
@@ -145,7 +165,6 @@ char	*get_next_line(int fd)
 // 	system("leaks a.out");
 // 	return (0);
 // }
-
 
 // int main() {
 // 	char *asd = NULL;

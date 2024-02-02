@@ -61,11 +61,7 @@ static char	*line(char **txt)
 	char	*t;
 
 	if (!*txt)
-	{
-		// aux = *txt;
-		// free(aux);
 		return (NULL);
-	}
 	finder = ft_strchr(*txt, '\n');
 	if (finder)
 	{
@@ -93,12 +89,6 @@ static char	*read_file(int fd)
 	char		*aux;
 
 	status = read(fd, buffer, BUFFER_SIZE);
-	if (status < 0) // controls de read en whiles
-	{
-		free(txt);
-		txt = NULL;
-		return (NULL);
-	}
 	while (status > 0)
 	{
 		buffer[status] = '\0';
@@ -113,13 +103,9 @@ static char	*read_file(int fd)
 		if (ft_strchr(txt, '\n') || !(ft_strchr(txt, '\0')))
 			break ;
 		status = read(fd, buffer, BUFFER_SIZE);
-		if (status < 0) // controls de read en whiles
-		{
-			free(txt);
-			txt = NULL;
-			return (NULL);
-		}
 	}
+	if (status < 0)
+		return (free(txt), txt = NULL, txt);
 	return (line(&txt));
 }
 
